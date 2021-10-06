@@ -20,3 +20,16 @@ is either the name of a plugin (without the .js extension) or the name of
 a core Haraka module, such as `Connection` or `Transaction`.
 
 To get documentation on writing a plugin type `haraka -h Plugins`.
+
+https://haraka.github.io/core/Outbound/#the-queue_outbound-hook
+https://haraka.github.io/tutorials/SettingUpOutbound/
+
+haraka -i haraka-outbound
+
+cd haraka-outbound
+
+echo "tls
+auth/flat_file" > config/plugins
+
+openssl req -x509 -nodes -days 2190 -newkey rsa:2048 \
+        -keyout config/tls_key.pem -out config/tls_cert.pem
