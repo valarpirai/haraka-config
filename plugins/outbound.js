@@ -44,7 +44,8 @@ exports.mail_bounced = function (next, hmail, err) {
   this.loginfo(err.deferred_rcpt);
   this.loginfo(err.bounced_rcpt);
   this.loginfo("END");
-  emailDeliveryCallBack({ 'token': hmail.notes['token'], 'rcpt': hmail.todo.rcpt_to[0].original, 'bounced': true });
+  var message = "bounced";
+  emailDeliveryCallBack({ 'token': hmail.notes['token'], 'rcpt': hmail.todo.rcpt_to[0].original, 'bounced': true, 'msg': message });
   next();
 };
 
