@@ -38,26 +38,21 @@ exports.mail_deferred = function (next, hmail, params) {
 
 exports.mail_bounced = function (next, hmail, err) {
   this.loginfo('Email bounced');
-  this.loginfo("START");
-  this.loginfo(hmail.todo.rcpt_to);
+  // this.loginfo("START");
+  var address = hmail.todo.rcpt_to[0];
+  this.loginfo(address);
   this.loginfo(hmail.notes);
-  this.loginfo(err);
-  this.loginfo(err.mx);
-  this.loginfo(err.deferred_rcpt);
-  this.loginfo(err.bounced_rcpt);
-  this.loginfo("END");
-  var message = "bounced";
-  emailDeliveryCallBack({ 'token': hmail.notes['token'], 'rcpt': hmail.todo.rcpt_to[0].original, 'bounced': true, 'msg': message });
+  // this.loginfo("END");
+  emailDeliveryCallBack({ 'token': hmail.notes['token'], 'rcpt': address.original, 'bounced': true, 'msg': address.reason });
   next();
 };
 
 exports.mail_delivered = function (next, hmail, params) {
   this.loginfo('Email delivered');
-  this.loginfo(hmail.path);
+  var address = hmail.todo.rcpt_to[0];
   this.loginfo(hmail.notes);
-  this.loginfo(hmail.todo.rcpt_to[0].original);
-  this.loginfo("END");
-  emailDeliveryCallBack({ 'token': hmail.notes['token'], 'rcpt': hmail.todo.rcpt_to[0].original, 'delivered': true });
+  this.loginfo(address.original);
+  emailDeliveryCallBack({ 'token': hmail.notes['token'], 'rcpt': address.original, 'delivered': true });
   next();
 };
 
@@ -91,7 +86,7 @@ const serialize = function (obj) {
 const emailDeliveryCallBack = (params) => {
   var url = config.webhook_url + '/email_delivery/report_callback?' + serialize(params);
   var req = http;
-  if (url.indexOf('https') != -1){
+  if (url.indexOf('https://') != -1){
     req = https;
   }
 
