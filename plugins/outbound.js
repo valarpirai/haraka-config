@@ -1,5 +1,6 @@
 var fs = require('fs');
 var https = require('https');
+const config = require('../config.json');
 
 
 exports.register = function() {
@@ -87,12 +88,12 @@ const serialize = function (obj) {
 }
 
 const emailDeliveryCallBack = (params) => {
-  var url = 'https://hodor.free.beeceptor.com/mail-delivery?' + serialize(params);
+  var url = config.webhook_url + '/email_delivery/report_callback?' + serialize(params);
 
   https.get(url, (res) => {
-    console.log('STATUS: ' + res.statusCode);
+    // console.log('STATUS: ' + res.statusCode);
     res.on('data', function (chunk) {
-      console.log('BODY: ' + chunk);
+      // console.log('BODY: ' + chunk);
     });
   });
 }
