@@ -1,4 +1,5 @@
 var fs = require('fs');
+var http = require('http');
 var https = require('https');
 const config = require('../config.json');
 
@@ -89,8 +90,12 @@ const serialize = function (obj) {
 
 const emailDeliveryCallBack = (params) => {
   var url = config.webhook_url + '/email_delivery/report_callback?' + serialize(params);
+  var req = http;
+  if (url.indexOf('https') != -1){
+    req = https;
+  }
 
-  https.get(url, (res) => {
+  req.get(url, (res) => {
     // console.log('STATUS: ' + res.statusCode);
     res.on('data', function (chunk) {
       // console.log('BODY: ' + chunk);

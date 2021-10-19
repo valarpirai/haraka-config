@@ -1,3 +1,3 @@
 {
-  "webhook_url" : "https://resting.free.beeceptor.com"
+  "webhook_url" : "http://localhost.freshservice-dev.com:3000"
 }
