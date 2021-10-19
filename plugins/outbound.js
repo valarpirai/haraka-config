@@ -39,20 +39,25 @@ exports.mail_deferred = function (next, hmail, params) {
 exports.mail_bounced = function (next, hmail, err) {
   this.loginfo('Email bounced');
   // this.loginfo("START");
-  var address = hmail.todo.rcpt_to[0];
-  this.loginfo(address);
-  this.loginfo(hmail.notes);
-  // this.loginfo("END");
-  emailDeliveryCallBack({ 'token': hmail.notes['token'], 'rcpt': address.original, 'bounced': true, 'msg': address.reason });
+  var log = this;
+  var addresses = hmail.todo.rcpt_to;
+  for (const address of addresses) {
+    log.loginfo(address);
+    log.loginfo(hmail.notes);
+    emailDeliveryCallBack({ 'token': hmail.notes['token'], 'rcpt': address.original, 'bounced': true, 'msg': address.reason });
+  }
   next();
 };
 
 exports.mail_delivered = function (next, hmail, params) {
   this.loginfo('Email delivered');
-  var address = hmail.todo.rcpt_to[0];
+  var log = this;
+  var addresses = hmail.todo.rcpt_to;
   this.loginfo(hmail.notes);
-  this.loginfo(address.original);
-  emailDeliveryCallBack({ 'token': hmail.notes['token'], 'rcpt': address.original, 'delivered': true });
+  for (const address of addresses) {
+    log.loginfo(address.original);
+    emailDeliveryCallBack({ 'token': hmail.notes['token'], 'rcpt': address.original, 'delivered': true });
+  }
   next();
 };
 
